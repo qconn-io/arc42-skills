@@ -1,6 +1,5 @@
 # arc42 Skills for Coding Agents
 
-[![skills.sh](https://skills.sh/b/qconn-io/arc42-skills)](https://skills.sh/qconn-io/arc42-skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Open source Agent Skills to navigate, author, and capture feedback on software architecture using the [arc42](https://arc42.org) documentation framework.
