@@ -1,0 +1,8 @@
+@startuml
+!pragma layout smetana
+rectangle "UNKNOWN: system boundary" as System
+note right of System
+  Placeholder only.
+  Ask for relevant context before replacing it.
+end note
+@enduml

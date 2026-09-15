@@ -1,0 +1,60 @@
+= Architecture starting template
+:toc:
+:sectanchors:
+
+This original starting structure follows arc42. It contains no accepted architecture.
+Replace only the sections relevant to the task; UNKNOWN is missing information, not permission to invent a fact.
+
+[[goals]]
+== 1. Introduction and goals
+UNKNOWN: system purpose, stakeholders, and relevant quality goals.
+
+[[constraints]]
+== 2. Constraints
+UNKNOWN: applicable constraints and their sources/status.
+
+[[context]]
+== 3. Context and scope
+UNKNOWN: system boundary, users, and neighboring systems.
+
+[plantuml,context-placeholder,svg]
+----
+include::diagrams/context.puml[]
+----
+
+[[strategy]]
+== 4. Solution strategy
+UNKNOWN: approach and rationale.
+
+[[blocks]]
+== 5. Building-block view
+UNKNOWN: responsibility owners and permitted interactions.
+
+[[runtime]]
+== 6. Runtime view
+UNKNOWN: the relevant scenario and failure behavior.
+
+[[deployment]]
+== 7. Deployment view
+UNKNOWN: runtime location and operations relevant to the task.
+
+[[concepts]]
+== 8. Cross-cutting concepts
+UNKNOWN: concepts already shared by the system.
+
+[[decisions]]
+== 9. Decisions
+UNKNOWN: existing decision records, status convention, responsible architect, and exception process.
+New recommendations remain proposed until the responsible decision process accepts them.
+
+[[quality]]
+== 10. Quality requirements
+UNKNOWN: concrete situations and observable outcomes relevant to the task.
+
+[[risks]]
+== 11. Risks and technical debt
+UNKNOWN: observed risks with evidence, distinct from assumptions.
+
+[[glossary]]
+== 12. Glossary
+UNKNOWN: terms whose meaning matters to this architecture.

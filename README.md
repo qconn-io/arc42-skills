@@ -1,50 +1,172 @@
+# arc42 Skills for Coding Agents
+
+[![skills.sh](https://skills.sh/b/qconn-io/arc42-skills)](https://skills.sh/qconn-io/arc42-skills)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+Open source Agent Skills to navigate, author, and capture feedback on software architecture using the [arc42](https://arc42.org) documentation framework.
+
+When AI coding agents write software without architecture awareness, code drifts from design, documentation rots, and architectural boundaries break. These skills give your agents disciplined, source-grounded architecture workflows that preserve human decision authority.
+
+Compatible with any model and any agent supporting the open Agent Skills standard (Codex, Claude Code, Cursor, Antigravity, Amp, Windsurf, etc.).
+
 ---
-name: arc42-skills
-description: Standalone distribution of the three arc42 architecture-authoring skills (arc42-author, arc42-guide, arc42-feedback) plus shared references and templates. For Codex CLI only; MIT-licensed. Human review of authored architecture remains required and is not replaced by these skills.
-license: MIT
----
 
-# arc42-skills
+## Quick Installation (30-second setup)
 
-Standalone, production-ready skill bundle extracted from the `ai-ready-arc42-pilot` pilot. It ships the three portable Codex skills exactly as used in that pilot, plus their shared `.agents/arc42/` references and templates so installation preserves the full context those skills reference.
+Install the skills directly using the standard skill manager or copy them into your project:
 
-No tests are included; this repo is the consumable artifact, not the pilot verification environment (`tests/`, `.arc42-work/`, `example-app/`, `docs/`, `walkthroughs/` remain in the pilot repo only).
+### Option 1: Using `skills` CLI (Recommended)
 
-## What is included
-
-| Skill directory | Skill file | Shared references/templates |
-|---|---|---|
-| `skills/arc42-author/` | `SKILL.md` | `skills/arc42-support/references/` (arc42-placement, discovery, interview, sources-and-review) |
-| `skills/arc42-guide/` | `SKILL.md` | `skills/arc42-support/templates/` (feedback.md, plan.md) |
-| `skills/arc42-feedback/` | `SKILL.md` | (same shared folders; installed together) |
-
-The shared `arc42-support/` folder mirrors `.agents/arc42/` from the pilot. When a user installs any of the three skills into their Codex `.claude/skills/` (or `.agents/skills/`) directory, the references and templates travel with them so skill instructions that point to `.agents/arc42/references/...` or `.agents/arc42/templates/...` resolve correctly.
-
-Reference model for packaging: [mattpocock/skills](https://github.com/mattpocock/skills) (MIT, per-skill `SKILL.md` with YAML frontmatter, no hidden dependencies, no custom installer).
-
-## Installation
-
-Copy the three named skill directories (`arc42-author`, `arc42-guide`, `arc42-feedback`) together with the `arc42-support/` directory; do not split references/templates from the skills. Preserve unrelated installed skills; these are additive.
-
-Example (Codex CLI consumer repo):
-
-```sh
-# From this repo root into your Codex skills directory
-mkdir -p ~/.claude/skills
-cp -r skills/arc42-author skills/arc42-guide skills/arc42-feedback skills/arc42-support ~/.claude/skills/
+```bash
+npx skills add qconn-io/arc42-skills
 ```
 
-No build, no package manager, no global install required. The skills are plain `SKILL.md` files with embedded instructions; they load when the Codex CLI discovers them.
+Select which skills to install and target agents (Codex, Claude Code, Cursor, Antigravity).
 
-## Scope and limitations
+### Option 2: Copy into your project
 
-- Supported client: Codex CLI only. Individual scenario evidence (not a blanket promise) determines what passed in the pilot.
-- Licensing: MIT (this repo and the three skills). Dependencies referenced by the skills (e.g., `openspec`) keep their upstream licenses; see the pilot's `THIRD_PARTY_NOTICES.md` for attribution.
-- The pilot repo (`ai-ready-arc42-pilot`) retains the synthetic Spring Boot application, documentation rendering pipeline, Python verification tests, and walkthrough evidence. That evidence is not reproduced here.
-- Actual authored architecture requires experienced-human review; the skills assist but do not grant authority. See `skills/arc42-author/SKILL.md` for the authority-guardrail rules.
+```bash
+# For Codex or generic Agent Skills standard
+mkdir -p .agents/skills
+cp -r /path/to/arc42-skills/skills/* .agents/skills/
 
-## Source and attribution
+# For Claude Code
+mkdir -p ~/.claude/skills
+cp -r /path/to/arc42-skills/skills/* ~/.claude/skills/
+```
 
-- Pilot source: `ai-ready-arc42-pilot` (same author, MIT for these skills).
-- Shared references/templates: `.agents/arc42/` from that pilot.
-- Skill structure and YAML frontmatter follow the convention established by `mattpocock/skills`.
+Every skill is self-contained with its own references and templates. No build, no server, and no global runtime required.
+
+---
+
+## Why These Skills Exist
+
+We built these skills to solve the three most common failure modes when using AI coding agents on non-trivial systems:
+
+### #1: The Agent Codes Blind to Architecture
+**The Problem:** Coding agents jump straight into editing files without knowing why the system was structured that way, violating component boundaries, coupling rules, and existing decisions.  
+**The Fix:** [`arc42-guide`](./skills/arc42-guide/SKILL.md) reads local architecture documentation in place, checks constraints and responsibilities, and drafts a structured change plan citing inspected sources before any code is touched.
+
+### #2: Architecture Documentation Rots
+**The Problem:** Keeping 12 arc42 chapters, ADRs, and PlantUML diagrams synchronized with system evolution is tedious and easily abandoned.  
+**The Fix:** [`arc42-author`](./skills/arc42-author/SKILL.md) conducts a focused, dependency-ordered interview to clarify intent, maps affected concerns to the right arc42 chapters, and coordinates changes across AsciiDoc prose, ADRs, and diagrams.
+
+### #3: Engineers Hit Discrepancies and Guess
+**The Problem:** When an engineer or agent encounters a contradiction between code and architecture during implementation, they either invent intent or create silent workarounds.  
+**The Fix:** [`arc42-feedback`](./skills/arc42-feedback/SKILL.md) captures observed behavior, evidence, impact, and a precise architectural question into an unapproved feedback draft for the responsible architect to review.
+
+---
+
+## Skills Reference
+
+| Skill | Description | Primary Role |
+|---|---|---|
+| **[`arc42-guide`](./skills/arc42-guide/SKILL.md)** | Architecture Q&A and feature change planning | Explore & Plan |
+| **[`arc42-author`](./skills/arc42-author/SKILL.md)** | Interactive interview to draft & evolve arc42 docs | Document & Evolve |
+| **[`arc42-feedback`](./skills/arc42-feedback/SKILL.md)** | Capture implementation feedback & discrepancies | Flag & Escalate |
+
+---
+
+### 1. `arc42-guide` — Explore & Plan
+
+Answers architecture questions and generates change plans derived strictly from inspected sources. Never writes application code or modifies architectural intent.
+
+- **What it does:**
+  - Answers questions about system boundaries, component ownership, runtime interactions, and quality constraints with inspectable citations.
+  - Generates structured change plans (using `templates/plan.md`) that map out component placement, affected APIs, and blocking architectural decisions.
+- **When to use:**
+  - Before starting a feature: *"Where does this new service or logic belong?"*
+  - During development: *"What constraints or policies apply to database transactions or retries?"*
+  - Refactoring: *"Which components own this data lifecycle?"*
+- **How to use:**
+  ```text
+  $arc42-guide Which documented responsibilities and constraints apply to adding payment retries? Cite current sources; do not edit code or architecture.
+  ```
+  ```text
+  $arc42-guide We need to add an export webhook. Produce a change plan showing component placement and required decisions.
+  ```
+
+---
+
+### 2. `arc42-author` — Document & Evolve
+
+Drafts coordinated updates to arc42 documentation (AsciiDoc, ADRs, and PlantUML diagrams) through a disciplined, dependency-ordered interview.
+
+- **What it does:**
+  - Interviews the user starting from smallest consequential questions (goals -> boundaries -> interfaces -> failure -> decisions).
+  - Identifies the exact affected arc42 chapters (Chapters 1–12), ADRs, and diagrams.
+  - Produces surgical, coordinated draft diffs across prose, decisions, and PlantUML diagrams.
+  - Requires explicit write-scope authorization before modifying any documentation.
+- **When to use:**
+  - Starting architecture for a new project from an arc42 template.
+  - Documenting a newly approved architectural change, service, or boundary.
+  - Updating existing sequence diagrams or building-block views to reflect reality.
+  - Processing approved feedback received from engineering.
+- **How to use:**
+  ```text
+  $arc42-author Help me clarify this architecture change. Inspect current sources, then interview me before proposing any write scope.
+  ```
+  ```text
+  $arc42-author Draft the architectural updates for our new audit logging pipeline in Section 5 (Building Blocks) and Section 8 (Cross-Cutting Concepts).
+  ```
+
+---
+
+### 3. `arc42-feedback` — Flag & Escalate
+
+Captures engineering difficulties, missing intent, or code discrepancies discovered during implementation as structured drafts for architect review.
+
+- **What it does:**
+  - Distinguishes observed implementation behavior from documented intent and engineer opinion.
+  - Fills a structured feedback form (`templates/feedback.md`) detailing task context, evidence, engineering impact, and the exact decision requested from the architect.
+  - Saves drafts locally as `draft` / `unapproved` (typically under `.arc42-work/feedback/<name>.md`).
+  - Offers a clean handoff to `arc42-author` for when the architect reviews the feedback.
+- **When to use:**
+  - An engineer finds that actual code diverges from arc42 Chapter 5 or runtime diagrams.
+  - An implementation choice requires an exception to documented architectural constraints.
+  - Required architectural guidance is missing or ambiguous.
+- **How to use:**
+  ```text
+  $arc42-feedback Capture this engineering observation for the architect. Present an unapproved draft before asking where to save it.
+  ```
+  ```text
+  $arc42-feedback Document the discrepancy: our payment provider requires async callbacks, but Chapter 6 only specifies synchronous HTTP.
+  ```
+
+---
+
+## The arc42 Architecture Loop
+
+These three skills form a continuous feedback loop between architects and software engineers:
+
+```mermaid
+flowchart LR
+    A["arc42-guide\n(Explore & Plan)"] -->|Implement| B["Implementation\n(Coding Agent)"]
+    B -->|Discrepancy / Gap| C["arc42-feedback\n(Capture Unapproved Draft)"]
+    C -->|Handoff to Architect| D["arc42-author\n(Interview & Draft Changes)"]
+    D -->|Human Review & Approval| E["Approved Architecture\n(arc42 Docs, ADRs, Diagrams)"]
+    E -->|Source of Truth| A
+```
+
+### Core Guardrails & Principles
+
+1. **Source-grounded evidence:** Every architectural claim must cite verified files, revisions, or anchors. If evidence is missing, it remains explicitly labeled `UNKNOWN`.
+2. **Intent vs. Observation:** Documented architectural intent is separated from inspected code behavior and recommendations. Code is not self-authorizing intent.
+3. **Deliberate, scoped writes:** The agent never silently overwrites files. Write scope must be explicitly authorized. Working plans and feedback drafts remain local (under `.arc42-work/`).
+4. **Human authority:** AI skills assist, interview, and draft; human architects make decisions and approve changes. No skill unilaterally grants architectural approval.
+
+---
+
+## Starter Template
+
+Starting arc42 on a new repository? A clean, lightweight arc42 starter template is included under [`templates/arc42/`](./templates/arc42/):
+- [`index.adoc`](./templates/arc42/index.adoc): Full 12-section arc42 skeleton with explicit `UNKNOWN` placeholders.
+- [`diagrams/context.puml`](./templates/arc42/diagrams/context.puml): Initial PlantUML system context diagram.
+
+Copy it to your project's `docs/architecture/` directory and use `arc42-author` to begin filling it in.
+
+---
+
+## License
+
+[MIT](LICENSE) © 2026 Max Kogan / qconn

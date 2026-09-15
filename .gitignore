@@ -1,0 +1,5 @@
+.arc42-work/
+.DS_Store
+node_modules/
+*~
+*.swp
